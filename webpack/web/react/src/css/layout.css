@@ -1,0 +1,143 @@
+.nav-bar {
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    width: 100%;
+    border-bottom: none;
+    line-height: 30px;
+    padding: 16px 0;
+    box-shadow: 4px 0 5px 0 rgba(51, 51, 51, .2);
+    background-color: #fff;
+    display: flex;
+    .logo {
+        height: 30px;
+        margin-left: 10px;
+    }
+    ul {
+        display: flex;
+        margin-left: 60px;
+        li {
+            margin: 0 10px;
+        }
+    }
+    a {
+        color: #000;
+    }
+    .nav-active {
+        background-color: #c9eac9;
+    }
+}
+
+.side-bar {
+    position: fixed;
+    top: 63px;
+    bottom: 0;
+    left: 0;
+    width: 180px;
+    overflow: auto;
+    background-color: beige;
+    ul {
+        li {
+            cursor: pointer;
+        }
+        .ul-c[number="1"] {
+            height: 40px;
+        }
+        .ul-c[number="2"] {
+            height: 80px;
+        }
+        .ul-c[number="3"] {
+            height: 120px;
+        }
+        .ul-c[number="4"] {
+            height: 160px;
+        }
+        .ul-c[number="5"] {
+            height: 200px;
+        }
+        .ul-c[number="6"] {
+            height: 240px;
+        }
+        .ul-c[number="7"] {
+            height: 280px;
+        }
+        .ul-c[number="8"] {
+            height: 320px;
+        }
+        .ul-c[number="9"] {
+            height: 360px;
+        }
+        .ul-c[number="10"] {
+            height: 400px;
+        }
+        .ul-c[number="11"] {
+            height: 440px;
+        }
+        .ul-c {
+            padding-left: 10px;
+            background-color: #d0c7c7;
+        }
+        .li-p {            
+            line-height: 40px;
+            &>p,&>a {
+                padding-left: 10px;
+            }
+            .toggle-hide {
+                height: 0;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+            .toggle-show {
+                overflow: hidden;
+                transition: all 0.3s ease;  
+            }
+        }
+        .li-c {
+            i {
+                margin-right: 8px;
+            }
+        }
+        .active {
+            /* background-color: #c9eac9; */
+        }
+        .li-p:hover {
+            background-color: #c9eac9;
+        }
+        a {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #000;
+            i {
+                margin-right: 8px;
+            }
+        }
+    }
+    .sidebar-active {
+        color: red;
+    }
+}
+/* 默认布局 */
+.default-container{
+    padding: 70px 180px;
+}
+/* 全屏布局 */
+.full-container {
+
+}
+/* loading-page */
+.load-page {
+    position:fixed;
+    z-index: 99999;
+    background: rgba(0,0,0,0.5);
+    left: 0;
+    top:0;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+.h-500 {
+    height:500px;
+}

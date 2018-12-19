@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>无重复最长字符串</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 暴力法 -- 测试用例通不过
+    var lengthOfLongestSubstring = function(s) {
+    const n = s.length;
+    let ans = 0;
+    let arr = [];
+    for (let i=0; i<n; i++) {
+        // 截取索引 i 长度 j 的字符串
+        for (let j=i+1; j<= n; j++) {
+            const schild = s.slice(i, j)
+            arr.push(schild)
+        }
+    }
+    console.log(arr)
+    let maxArr = []
+    for (let i=0; i<arr.length; i++) {
+        let len = arr[i].length
+        let tempArr = [...new Set(arr[i].split(''))];
+        if (tempArr.length == len) {
+            maxArr.push(len)
+        }
+    }
+    console.log(maxArr)
+    return Math.max(...maxArr)
+};
+
+// lengthOfLongestSubstring('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+
+
+// 滑动窗口法
+var getLen = function(s) {
+    const n = s.length;
+    let tempStr = "";
+    let ans = 0;
+    let i = 0;
+    let j = 0;
+    while(i < n && j< n) {
+        if (!tempStr.includes(s[j])) {
+            tempStr += s[j++]
+            ans = Math.max(ans, j-i)
+        } else {
+            const index = s.lastIndexOf(s[j])
+            tempStr = s.slice(index, j)
+        }
+    }
+    return ans;
+};
+// getLen("abcabcbb")
+
+
+// 移动窗口优化
+var getLen2 = function(s) {
+    const n = s.length;
+    let tempStr = "";
+    let ans = 0;
+    let i = 0;
+    let j = 0;
+    while (j<n) {
+        if (tempStr.includes(s[j])) {
+            i = tempStr.lastIndexOf(s[j]) + 1
+            tempStr = tempStr.slice(i)
+        }
+        ans = Math.max(ans, tempStr.length + 1)
+        tempStr += s[j++]
+        console.log('ans', ans)
+    }
+    
+    return ans;
+}
+
+var getLen3 = function(s) { 
+    var len = s.length; 
+    var arr=[], num=0, i=0, j=0; 
+    for(j=0; j<len; j++){ 
+        if(arr.indexOf(s[j])!==-1){ 
+            i = arr.lastIndexOf(s[j])+1; 
+            arr.splice(0,i); 
+        } 
+        num = Math.max(num, arr.length+1); 
+        arr.push(s[j]); 
+        console.log('num', num)
+    } 
+    return num; 
+};
+getLen2("dvdf")
+getLen3("dvdf")
+
+
+
+// 移动窗口优化
+var getLen4 = function(s) { 
+    let len = s.length;
+    let i = 0;
+    let j = 0;
+    let ans = 0;
+    let tempStr = "";
+
+    while (j<len) {
+        if (tempStr.includes(s[j])) {
+            i = tempStr.lastIndexOf(s[j]) + 1;
+            tempStr = tempStr.slice(i)
+        }
+        // 初始时为空
+        ans = Math.max(ans, tempStr.length + 1)
+        tempStr += s[j++]
+    }
+    return ans;
+};
+console.log('444', getLen4('dvdd'))
+
+
+let getLen5 = function(s){
+    let checkCharMap = {};
+    let currentBeginIndex = 0;
+    let currentMax = 0;
+    for(let i=0; i<s.length; i++){
+        if(s.length - currentBeginIndex <= currentMax){
+            break;
+        }
+        
+        let itemChar = s[i];
+
+        if(checkCharMap[itemChar] === undefined){
+            checkCharMap[itemChar] = i;
+        }
+
+        let lastIndex = checkCharMap[itemChar];
+        checkCharMap[itemChar] = i;
+
+        if(lastIndex >= currentBeginIndex && lastIndex != i){
+            currentBeginIndex = lastIndex + 1;
+        }
+
+        if(i - currentBeginIndex + 1 > currentMax){
+            currentMax = i - currentBeginIndex + 1;
+        }
+    }
+
+    return currentMax;
+}
+console.log('5555', getLen4('dvdf'))
+
+
+var findMedianSortedArrays = function(nums1, nums2) {
+    let num = [...nums1, ...nums2].sort();
+    let m = parseInt(num.length / 2);
+    if (m % 2 == 0) {
+        return (num[m] + num[m-1])/2
+    } else {
+        return num[m]
+    }
+};
+findMedianSortedArrays([1,2], [3,4])
+</script>
+</html>

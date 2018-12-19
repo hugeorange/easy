@@ -1,0 +1,21 @@
+html, body, #app, .main-layout {
+    height: 100%;
+}
+.ant-layout-header {
+    padding: 0;
+}
+.main-layout {
+    .header {
+        .logo {
+            float: left;
+            color: #fff;
+            margin-right: 50px;
+            margin-top: 12px;
+            margin-left: 50px;
+            width: 100px;
+        }
+    }
+}
+.page-container {
+    height: 2280px;
+}

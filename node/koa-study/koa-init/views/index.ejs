@@ -1,0 +1,82 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><%= title %></title>
+</head>
+<body>
+    <h2>get请求</h2>
+    <p>Name: <input id="name1" name="name" value="koa"></p>
+    <p>Password: <input id="pwd1" name="password" type="password"></p>
+    <button id="btn1">get提交</button>
+
+    <h2>post请求</h2>
+    <p>Name: <input id="name2" name="name" value="koa"></p>
+    <p>Password: <input id="pwd2" name="password" type="password"></p>
+    <button id="btn2">post提交</button>
+
+    <h2>获取用户信息</h2>
+    <button id="btn3">获取信息</button>
+
+    <input type="text" class="inputnumber">
+    <span class="jisuan">计算</span>
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/1.12.2/jquery.js"></script>
+<script src="./number.js"></script>
+<script>
+    var nzhcn = Nzh.cn;                 // 使用简体中文,  另外有 Nzh.hk -- 繁体中文
+
+    $(".jisuan").click(function() {
+        var input = $(".inputnumber").val();
+        console.log(nzhcn.toMoney(input, {outSymbol: false}));
+        
+    })
+
+
+
+    $("#btn1").on('click', function() {
+        $.ajax({
+            url: "http://127.0.0.1:3003/api/v1/test",
+            method: "GET",
+            data: {
+            	name: $('#name1').val(),
+            	pwd: $("#pwd1").val()
+            },
+            success: function(result){
+                console.log(result);
+            }
+        });
+    });
+
+    $("#btn2").on('click', function() {
+        $.ajax({
+            url: "http://127.0.0.1:3003/api/v1/login",
+            method: "POST",
+            data: {
+            	username: $('#name2').val(),
+            	pwd: $("#pwd2").val()
+            },
+            success: function(result){
+                console.log(result);
+            }
+        });
+    })
+    
+    $("#btn3").on('click', function() {
+        $.ajax({
+            url: "http://127.0.0.1:3003/api/v1/getInfo",
+            method: "POST",
+            headers: {
+                'x-token': 'xxxx======'
+            },
+            data: {},
+            success: function(result){
+                console.log(result);
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    })
+</script>
+</html>

@@ -1,0 +1,112 @@
+// 定义别名
+@alias { 
+    bsz: border-size; 
+    bst: border-style; 
+    bcl: border-color; 
+}
+
+.test {
+    background-color: red;
+}
+
+.autoprefixer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-transform: translateY(30);
+            transform: translateY(30);
+}
+
+.autoprefixer .qiantao {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+    }
+
+.cssnext {
+    background: color(red alpha(-10%));
+}
+
+.precss {
+        background: rgb(96, 51, 169)
+}
+
+
+.header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+}
+
+
+.header .content {
+        /* color: color(red alpha(10%)); 这种颜色函数已过时 */
+        /* 调用颜色函数 */ 
+        color: rgba(5, 110, 240, 0.5);
+        bsz: 1px;
+        bst: solid;
+        bcl: red;
+    }
+
+/* 测试gulp-sass,precss 变量的使用 */
+
+body { 
+    font: 100% Helvetica, sans-serif;
+    color: #333; 
+}
+
+/** 测试 precss 的逻辑判断语句*/
+.column { 
+        width: 50%; 
+        float: left 
+}
+
+/* 测试 precss 的循环语句 */
+p:nth-of-type(1) { 
+        margin-left: calc( 100% / 1 ); 
+    }
+p:nth-of-type(2) { 
+        margin-left: calc( 100% / 2 ); 
+    }
+p:nth-of-type(3) { 
+        margin-left: calc( 100% / 3 ); 
+    }
+
+/* 测试precss 的 each循环语句 */ 
+.icon-twitter { 
+        background: url('img/twitter.png'); 
+    } 
+.icon-facebook { 
+        background: url('img/facebook.png'); 
+    } 
+.icon-youtube { 
+        background: url('img/youtube.png'); 
+    }
+
+
+/** 测试precss中的混合宏 mixin 这种 mixin的使用方式好像已经不能使用了 *
+
+@define-mixin icon $network, $color {
+     .button.$(network) { 
+        background-image: url('img/$(network).png'); 
+        background-color: $color; 
+    }
+} 
+
+@mixin icon twitter, blue; 
+@mixin icon youtube, red;
+*/
+
+/** precss 使用 mixin的方式和 */
+.button.aaa { 
+        background-image: url('img/aaa.png'); 
+        background-color: blue; 
+    } 
+
+
+
+/* 测试gulp的watch功能.... */
+/*# sourceMappingURL=maps/style.css.map */

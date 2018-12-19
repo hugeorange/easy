@@ -1,0 +1,38 @@
+{
+  "name": "postcss-demo",
+  "version": "1.0.0",
+  "description": "postcss牛刀小试",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "postcss"
+  ],
+  "author": "orange-326242499@qq.com",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^7.2.5",
+    "cssnano": "^3.10.0",
+    "cssnext": "^1.8.4",
+    "gulp": "^3.9.1",
+    "gulp-postcss": "^7.0.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^1.12.1",
+    "postcss": "^6.0.16",
+    "postcss-alias": "^2.0.0",
+    "postcss-all-link-colors": "^2.0.0",
+    "postcss-center": "^1.1.0",
+    "postcss-circle": "^1.1.0",
+    "postcss-clearfix": "^2.0.1",
+    "postcss-color-short": "^0.2.4",
+    "postcss-crip": "^2.0.1",
+    "postcss-font-magician": "^2.1.0",
+    "postcss-mixins": "^6.2.0",
+    "postcss-position": "^1.0.0",
+    "postcss-size": "^2.0.0",
+    "postcss-triangle": "^2.0.0",
+    "postcss-verthorz": "^0.6.2",
+    "precss": "^3.1.0"
+  }
+}

@@ -1,0 +1,99 @@
+/**
+    border: 1px 可自定义颜色
+    postcss-mixins 插件
+    使用方法：在需要添加 1px 边框的类的样式内
+    例子：要为class为 test-1px 的元素添加 1px 边框
+    .test-1px {
+        margin: 20px auto; // 其他样式正常写
+        @mixin left_1px red;
+    }
+ */
+
+@define-mixin top_1px $color {
+    position: relative;
+    &:after {
+        border-top:1px solid $color;
+        width:200%;
+        height:200%;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:0;
+        content:"";
+        transform:scale(0.5);
+        transform-origin:0 0;
+        box-sizing:border-box;
+    }
+}
+
+@define-mixin right_1px $color {
+    position: relative;
+    &:after {
+        border-right:1px solid $color;
+        width:200%;
+        height:200%;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:0;
+        content:"";
+        transform:scale(0.5);
+        transform-origin:0 0;
+        box-sizing:border-box;
+    }
+}
+
+@define-mixin bottom_1px $color {
+    position: relative;
+    &:after {
+        border-bottom:1px solid $color;
+        width:200%;
+        height:200%;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:0;
+        content:"";
+        transform:scale(0.5);
+        transform-origin:0 0;
+        box-sizing:border-box;
+    }
+}
+
+
+@define-mixin left_1px $color {
+    position: relative;
+    &:after {
+        border-left:1px solid $color;
+        width:200%;
+        height:200%;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:0;
+        content:"";
+        transform:scale(0.5);
+        transform-origin:0 0;
+        box-sizing:border-box;
+    }
+}
+
+@define-mixin all_1px $color {
+    position: relative;
+    &:after {
+        border:1px solid $color;
+        width:200%;
+        height:200%;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:0;
+        content:"";
+        transform:scale(0.5);
+        transform-origin:0 0;
+        box-sizing:border-box;
+    }
+}
+
+
+

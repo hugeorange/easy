@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>监听storage事件</title>
+</head>
+<body>
+	
+</body>
+<script>
+	var SetItem = window.localStorage.setItem;
+	var RemoveItem = window.localStorage.removeItem;
+
+	//设置 localStorage
+	localStorage.setItem = function(key,value){
+		var setItemEvent = new Event("setItemEvent");
+		
+		setItemEvent.value = value;
+		setItemEvent.key = key;
+		//手动触发
+		window.dispatchEvent(setItemEvent);
+		//执行原方法
+		SetItem.apply(this,arguments);
+	}
+
+	//移除 localStorage
+	localStorage.removeItem = function(key){
+		var removeEvent = new Event('removeEvent');
+		removeEvent.key = key;
+		delete removeEvent.key;
+		window.dispatchEvent(removeEvent);
+		RemoveItem.apply(this,arguments);
+	}
+
+
+	window.addEventListener('setItemEvent',function(e){
+		console.log(e);
+	})
+
+	window.addEventListener('removeEvent',function(e){
+		console.log(e);
+	})
+
+
+	window.localStorage.setItem('xxx','张三');
+	window.localStorage.setItem('bbb','李四');
+	window.localStorage.removeItem('bbb','李四');
+
+
+
+/*
+//不能采取下面方法，localStorage，会被认为是 window 下的 localStorage
+	var localStorage = {
+		setItem:function(key,value){
+			var setItemEvent = new Event("setItemEvent");
+			setItemEvent.key = key;
+			setItemEvent.value = value;
+			//手动触发事件
+			window.dispatchEvent(setItemEvent);
+			//执行原方法
+			SetItem.apply(this,arguments);
+		},
+		getItem:function(key){
+			//获取不需要事件监听
+		},
+		removeItem:function(key){
+			var removeEvent = new Event('removeEvent');
+			removeEvent.key = key;
+			delete removeEvent.key;
+
+			window.dispatchEvent(removeEvent);
+			RemoveItem.apply(this,arguments);
+		},
+		clear:function(){
+
+		}
+	}
+
+
+	window.addEventListener('setItemEvent',function(e){
+		console.log(e);
+	})
+
+	window.addEventListener('removeEvent',function(e){
+		console.log(e);
+	})
+
+	window.localStorage.setItem('xxx','张三');
+	window.localStorage.setItem('bbb','李四');
+	window.localStorage.removeItem('bbb','李四');
+*/
+
+
+</script>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script src="utils.js"></script>
+<script>
+    console.log(utils);
+    var a = utils.getUrlParam('ccc');
+    console.log(a);
+
+
+    var time1 = new Date() - 0;
+    var time2 = new Date('2017-07-10 00:00:00') - 0;
+    console.log(utils.timeFormat(time1 -time2));
+
+    utils.cache.setItem('aaa','我是aaa');
+
+    var b = utils.cache.getItem('aaa');
+    console.log(b);
+
+    utils.cache.removeItem('aaa');
+
+    var c = utils.cache.getItem('aaa');
+    console.log(c);
+</script>
+</html>

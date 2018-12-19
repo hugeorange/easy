@@ -1,0 +1,24 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false,
+        "useBuiltIns": true,
+        "targets": {"browsers": ["last 2 versions", "safari >= 7", "ie>=9"]}
+      }
+    ],
+    "stage-0",
+    "react"
+  ],
+  "plugins": [
+    "syntax-dynamic-import",
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "style": "css"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+
+    var longStr = function(s) {
+        let s1 = s.split('').reverse().join('')
+        if (s == s1) {
+            console.log('ssss', s)
+            return s;
+        };
+        console.log(s, s1)
+        let str = "";
+        let arr = []
+        let len = s.length;
+        let j = 0;
+
+        while(j < len) {
+            if (s[j] == s1[j]) {
+                str += s[j]
+            } else {
+                if (str.length > 1) {
+                    arr.push(str)
+                }
+                str = ""
+            }
+            if (j == len - 1) {
+                arr.push(str)
+            }
+            j++;
+            console.log('arr', arr)
+        }
+        let sortArr = arr.sort((a, b) => a.length > b.length)
+        console.log(sortArr)
+        let len1 = sortArr[0].length;
+        let resultArr = [];
+        sortArr.some(item => {
+            if (item.length === len1) {
+                resultArr.push(item)
+            } else {
+                return true
+            }
+        })
+        console.log('resultArr', resultArr)
+        resultArr.forEach(item => {
+            longStr(item)
+        })
+    }
+    var s = longStr('abacdgfdcaba')
+    console.log('s', s)
+    // longStr('babad')
+</script>
+</html>

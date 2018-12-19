@@ -1,0 +1,13 @@
+body{
+  background: violet;
+  /* background:red; */
+}
+.hello {
+  color: red;
+  background: url('./icon.png');
+  width: 80%;
+  margin: 0 auto;
+}
+.hello img{
+  width: 300px;
+}

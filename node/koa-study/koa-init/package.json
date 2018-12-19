@@ -1,0 +1,27 @@
+{
+  "name": "koa-init",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js dev xxx 222",
+    "go": "node app.js --env devlopment",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "koa-init"
+  ],
+  "author": "orange",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/cors": "^2.2.2",
+    "ejs": "^2.6.1",
+    "jsonwebtoken": "^8.3.0",
+    "koa": "^2.5.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "koa-views": "^6.1.4"
+  }
+}
