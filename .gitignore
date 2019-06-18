@@ -1,5 +1,5 @@
 # 忽略node_modules 目录下的所有文件，不管任何目录
-node_modules/*
+/node_modules/*
 # 忽略根目录下的 node_moudle
 /node_modules
 npm-debug.log
