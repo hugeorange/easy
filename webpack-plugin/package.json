@@ -1,0 +1,22 @@
+{
+  "name": "webpack-plugin-export",
+  "version": "1.0.0",
+  "description": "one webpack plugin for comps auto export in index.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "dev": "webpack --progress --color --watch"
+  },
+  "keywords": [
+    "webpack",
+    "plugin"
+  ],
+  "author": "YAOLEI",
+  "license": "ISC",
+  "devDependencies": {
+    "auto-export-plugin": "^1.0.4",
+    "webpack": "^4.34.0",
+    "webpack-cli": "^3.3.4"
+  }
+}
