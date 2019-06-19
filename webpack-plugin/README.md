@@ -10,7 +10,7 @@
     自动生成 dist/index.html 并引入 bundle  `HtmlWebpackPlugin`
     模板注入功能
     清理dist `clean-webpack-plugin`
-   
+5. 配置一个开发环境
 
 
 - 基本配置表
@@ -91,4 +91,23 @@ template：默认是 loadsh template，也可以加载自定义的 模板引擎l
 meta 
 chunks         允许注入的 chunk
 excludeChunks  不允许注入的 chunk
+
+思考：其实打包成多页应用不如：打包出多份代码，动态设置 entry（可根据 npm scripts 传入的不同参数），
+     这样本地开发时，就可以指启动相应的文件，优化了开发环境
+     发布时速度也变的更快
+     缺点：有可能需要起多个服务当涉及到修改公共位置代码时，需要部署多个服务上
+     
+     bmanage
+     Remote Address: 139.196.71.131:80
+     Remote Address: 211.138.122.234:80
+
+    会员
+    Remote Address: 139.196.71.131:80
+    Remote Address: 112.25.18.131:80
+    旺铺
+    Remote Address: 112.25.18.131:80
+    app.js 都是部署在同一台服务器上的吗
+
+
+
 ```
