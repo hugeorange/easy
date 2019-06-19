@@ -30,8 +30,7 @@ modules.export = {
         new HtmlWebpackPlugin({
             filename: !IS_DEV ? '../index.html' : 'index.html',
             config: appconfig,
-            template: './views/index.html', // 模板注入功能
-            chunks: ['vendors', 'app']
+            template: './views/index.html', // 默认使用 lodash-loader  lodash-template
         }),
     ],
     module: {
@@ -76,7 +75,20 @@ url-loader：
 
 相同点：都是在webpack中处理图片、字体等文件
 关系： url 封装了 file ，但不依赖 file
+```
+```
+html-webpack-plugin
 
 
+将 entry 配置的相关入口chunk  和  extract-text-webpack-plugin 抽取的css样式   
+插入到该插件提供的template配置项指定的内容基础上生成一个html文件（或自动生成一个默认的 html 文件），
+具体插入方式是将样式 link 插入到 head 元素中，script 插入到 head 或者 body 中。
 
+options：
+title
+filename
+template：默认是 loadsh template，也可以加载自定义的 模板引擎loader 如：ejs，pug
+meta 
+chunks         允许注入的 chunk
+excludeChunks  不允许注入的 chunk
 ```

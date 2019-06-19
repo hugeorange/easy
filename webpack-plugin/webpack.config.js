@@ -1,4 +1,5 @@
 const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
     entry: './index.js',
     output: {
@@ -10,7 +11,13 @@ module.exports = {
     devtool: 'inline-source-map',
     mode: 'development',
     target: 'node',
-    plugins: [],
+    plugins: [
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            config: {title: 'html-webpack-plugin'},
+            template: './template/index.html', // 模板注入功能
+        }),
+    ],
 }
 
 /**
