@@ -11,7 +11,10 @@
     模板注入功能
     清理dist `clean-webpack-plugin`
 5. 配置一个开发环境
-
+    `mode: development` 
+    生产环境：`devtool: cheap-source-map`
+    开发环境：`devtool: 'inline-source-map'`
+    代码变动后自动编译代码：`webpack-dev-server`
 
 - 基本配置表
 ```
@@ -26,9 +29,12 @@ modules.export = {
         path: path.resolve(__dirname, 'dist')
         filename: 'main.js'
     },
+    devServer: {
+        contentBase: './dist'
+    },
     plugins: [
         new HtmlWebpackPlugin({
-            filename: !IS_DEV ? '../index.html' : 'index.html',
+            filename: 'index.html',
             config: appconfig,
             template: './views/index.html', // 默认使用 lodash-loader  lodash-template
         }),
@@ -96,18 +102,34 @@ excludeChunks  不允许注入的 chunk
      这样本地开发时，就可以指启动相应的文件，优化了开发环境
      发布时速度也变的更快
      缺点：有可能需要起多个服务当涉及到修改公共位置代码时，需要部署多个服务上
-     
-     bmanage
-     Remote Address: 139.196.71.131:80
-     Remote Address: 211.138.122.234:80
+```
 
-    会员
-    Remote Address: 139.196.71.131:80
-    Remote Address: 112.25.18.131:80
-    旺铺
-    Remote Address: 112.25.18.131:80
-    app.js 都是部署在同一台服务器上的吗
+- 开发环境
+```
+为了更容易地追踪 error 和 warning，JavaScript 提供了 source map 功能，可以将编译后的代码映射回原始源代码。
+如果一个错误来自于 b.js，source map 就会明确的告诉你。
 
+代码变动后自动编译代码：
+1. webpack watch mode(webpack 观察模式) 使用： webpack --watch
+2. webpack-dev-server
+   提供了一个小型的 web server ，可以实时重载 (living reloading)
+   npm install --save-dev webpack-dev-server
+
+   devServer {
+       contentBase: './dist', // 默认 false
+       publicPath: '/', // 优先级更高
+   }
+   以上配置告知 webpack-dev-server，将 dist 目录下的文件 serve 到 localhost:8080 下。
+   
+   webpack-dev-server 在编译之后不会写入到任何输出文件。
+   而是将 bundle 文件保留在内存中，然后将它们 serve 到 server 中，就好像它们是挂载在 server 根路径上的真实文件一样。
+   如果你的页面希望在其他不同路径中找到 bundle 文件，则可以通过 dev server 配置中的 publicPath 选项进行修改。
+
+   contentBase 与 publicPath 的区别：
+   
+
+
+3. webpack-dev-middleware
 
 
 ```
