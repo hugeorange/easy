@@ -1,19 +1,41 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+const program = require('commander')
 
-let timestamp = new Date() - 0
+program
+    .option('--progress')
+    .option('--watch')
+    .option('--config')
+    .option('--env <env>')
+    .parse(process.argv)
+
+const isDev = program.env == 'dev' ? true : false
 module.exports = {
     entry: './index.js',
     output: {
-        path: path.resolve(__dirname, 'dist/' + timestamp),
+        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].[contenthash:8].js'
     },
     module: {
         rules: []
     },
-    devtool: 'inline-source-map',
-    mode: 'development',
-    target: 'node',
+    devServer: {
+
+    },
+    mode: isDev ? 'development' : 'production',
+    devtool: isDev ? 'inline-source-map' : 'source-map',
+    optimization: {
+        runtimeChunk: 'single',
+        splitChunks: {
+        cacheGroups: {
+            vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all'
+            }
+        }
+        }
+    },
     plugins: [
         new CleanWebpackPlugin({ 
             root: path.resolve(__dirname, 'dist'),
