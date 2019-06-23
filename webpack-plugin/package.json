@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js --env=prod",
+    "build": "rm -rf dist && webpack --config webpack.config.js --env=prod",
     "dev": "webpack --progress --color --watch",
     "start": "webpack-dev-server --progress --env=dev"
   },

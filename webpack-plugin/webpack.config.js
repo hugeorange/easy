@@ -1,6 +1,8 @@
 const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const program = require('commander')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
 
 program
     .option('--progress')
@@ -10,6 +12,7 @@ program
     .parse(process.argv)
 
 const isDev = program.env == 'dev' ? true : false
+console.log(process.env.PORT)
 module.exports = {
     entry: './index.js',
     output: {
@@ -20,10 +23,10 @@ module.exports = {
         rules: []
     },
     devServer: {
-
+        open: true
     },
     mode: isDev ? 'development' : 'production',
-    devtool: isDev ? 'inline-source-map' : 'source-map',
+    devtool: isDev ? 'cheap-module-eval-source-map' : '',
     optimization: {
         runtimeChunk: 'single',
         splitChunks: {
@@ -37,19 +40,17 @@ module.exports = {
         }
     },
     plugins: [
-        new CleanWebpackPlugin({ 
-            root: path.resolve(__dirname, 'dist'),
-            dry: false // 启用删除文件
-        }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             config: {title: 'html-webpack-plugin'},
             template: './template/index.html', // 模板注入功能
         }),
+        new webpack.ProvidePlugin({
+            _: 'lodash',
+        }),
+        // 定义全局环境变量
+        new webpack.DefinePlugin({
+            'ENVVIROMENT': isDev ? JSON.stringify('devploment') : JSON.stringify('production')
+        })
     ],
 }
-
-/**
- * webpack-dev-server  会自动帮我们刷新浏览器，热替换等
- * webpack watch 模式 不会帮我们做上述处理
- */

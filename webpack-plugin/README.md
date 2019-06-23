@@ -41,6 +41,10 @@
 
 17. 构建性能
 
+18. 内容安全策略
+19. 管理依赖
+20. 公共路径
+21. 集成
 - 基本配置表
 ```
 // webpack.config.js
@@ -297,8 +301,8 @@ plugins: [
 babel-present-env package 通过 browserlist 来转义那些浏览器不支持的特性
 这个 present 使用 useBuiltins 选项，默认值是 false
 
-shim: 将一个新的 api 引入到一个旧的环境中，而且仅靠就环境中的手段实现
-polyfill：弥补旧环境中 api 的缺失
+shim: 垫片 -- 将一个新的 api 引入到一个旧的环境中，而且仅靠就环境中的手段实现
+polyfill： 腻子  -- 弥补旧环境中 api 的缺失
 ```
 
 - 渐进式网络应用程序
@@ -350,6 +354,45 @@ rules: [{test: /.js$/, loader: 'babel-loader'}]
 
 应该这样 
 rules: [{test: /.js$/, loader: 'babel-loader', include: Path.resolve(__dirname, 'src')}]
+
+
+bootstrap 引导时间
+
+dll
+使用 DllPlugin 为更改不频繁的代码生成单独的编译结果，可以提高应用程序的编译速度
+
+小即是块
+减少便以结果的整体大小，以提高构建性能，尽量保持 chunk 体积小
+在多页面中使用 commonChunkPlugin，并开启 async 模式
+
+work池
+可以将消耗资源的 loader ，分流给一个 worker pool（池）
+
+
+### 开发环境
+
+在内存中编译，开启 HMR: 使用 webpack-dev-server webpack-hot-middeware webpack-dev-middeware
+
+devtool:
+在大多数情况下，最佳选择是 cheap-module-eval-source-map。
+生产环境没必要用 source-map，
+
+
+```
+- 内容安全策略
+
+- 管理依赖
+```
+require.context 的使用
+```
+
+- 公共路径
+```
+publicPath: 指定所有资源的基础路径
+
+new webpack.DefinePlugin()  定义全局环境变量
+
+在运行时通过 npm scripts 增加环境变量
 ```
 
 
@@ -361,7 +404,6 @@ rules: [{test: /.js$/, loader: 'babel-loader', include: Path.resolve(__dirname, 
 
 
 
-
 ** 之后，思考，你在项目做了 webpack 哪些优化，把标准答案写在这里 **
-
+- webpack 插件不新开窗口，在原基础上更改 
 
