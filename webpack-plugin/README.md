@@ -126,10 +126,18 @@ excludeChunks  不允许注入的 chunk
    如果你的页面希望在其他不同路径中找到 bundle 文件，则可以通过 dev server 配置中的 publicPath 选项进行修改。
 
    contentBase 与 publicPath 的区别：
+   contentBase: 告诉服务器从哪里提供内容，只有你在想要提供静态姿态资源时才需要
+   publicPath: 将用于确定应该从那里提供 bundle，并且优先使用此项
    
-
+    类比：
+    output.publicPath: 静态资源存放位置目录的前缀, 
+    静态资源路径：output.publicPath + 资源loader或插件等配置的路径
+              ：可设置为 http://cdn/assets，相当于从 cdn 取静态资源
 
 3. webpack-dev-middleware
 
+
+cleanWebpackPlugin
+chunkHash
 
 ```

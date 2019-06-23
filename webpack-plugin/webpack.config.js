@@ -1,9 +1,12 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+
+let timestamp = new Date() - 0
 module.exports = {
     entry: './index.js',
     output: {
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist/' + timestamp),
     },
     module: {
         rules: []
@@ -12,6 +15,10 @@ module.exports = {
     mode: 'development',
     target: 'node',
     plugins: [
+        new CleanWebpackPlugin({ 
+            root: path.resolve(__dirname, 'dist'),
+            dry: false // 启用删除文件
+        }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             config: {title: 'html-webpack-plugin'},
