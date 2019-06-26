@@ -17,7 +17,7 @@
 ### Linux 学习
 
 
-dddd
+学习git rebase的使用
 
 
 
