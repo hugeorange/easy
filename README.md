@@ -1,4 +1,5 @@
 ### 图解HTTP学习
+test 分支学习rebase使用，在 test分支上 git rebase master
 ### es6 练习
 ### gulp 学习
 ### 会动的简历
