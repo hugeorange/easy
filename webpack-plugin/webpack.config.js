@@ -4,15 +4,23 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 
+
+// console.log('process--->参数', process.env.npm_config_params)
+// npm run dev --params=123 这种情况通过上面获取参数
+
+// console.log('process--->参数', process.argv)
+// "devs": "webpack --progress --colors --params=123" 获取参数，通过数组形式展示
+
 program
     .option('--progress')
+    .option('--colors')
     .option('--watch')
     .option('--config')
     .option('--env <env>')
     .parse(process.argv)
 
 const isDev = program.env == 'dev' ? true : false
-console.log(process.env.PORT)
+
 module.exports = {
     entry: './index.js',
     output: {

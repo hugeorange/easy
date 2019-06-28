@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf dist && webpack --config webpack.config.js --env=prod",
-    "dev": "webpack --progress --color --watch",
-    "start": "webpack-dev-server --progress --env=dev"
+    "dev": "webpack --progress --colors --watch",
+    "devs": "webpack --progress --colors --params=123",
+    "start": "webpack-dev-server --colors --progress --env=dev"
   },
   "keywords": [
     "webpack",
