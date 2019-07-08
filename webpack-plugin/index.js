@@ -1,34 +1,38 @@
-import _ from "lodash";
-// import React from "react";
-// import ReactDom from "react-dom";
-import { cube } from "./src/math.js";
-
-// import cache from './src/comps/index'
+// import _ from "lodash";
 
 // 并没有 tree shanking 啊
 function component() {
-  let element = document.createElement("div");
+  let element = document.createElement("button");
   element.id = 'test'
-  // element.innerHTML = ["Hello webpack!", "5 cubed is equal to " + cube(5)].join("\n\n");
   return element;
 }
 document.body.appendChild(component());
 var test = document.getElementById('test')
-var divs = '测试 import 或者 require.ensure'
-test.innerHTML = divs;
+var btns = '测试 import 或者 require.ensure'
+test.innerHTML = btns;
 
 
 
 test.onclick = function() {
   console.log('启动测试环境')
-  import(/* webpackChunkName: "testimport" */ './src/comps/a').then(module => {
-    console.log(module)
+
+  import(/* webpackChunkName: "esModule" */ './src/esModule').then(module => {
+    console.log('esModule-->', module)
   })
 
-  require.ensure([], require => {
-    var result = require('./src/comps/b')
-    console.log(result)
-  }, 'testrequire')
+  // import(/* webpackChunkName: "common" */ './src/common').then(module => {
+  //   console.log('common-->', module)
+  // })
+
+
+  // import(/* webpackChunkName: "testimport" */ './src/comps/a').then(module => {
+  //   console.log(module)
+  // })
+
+  // require.ensure([], require => {
+  //   var result = require('./src/comps/b')
+  //   console.log(result)
+  // }, 'testrequire')
 
 }
 

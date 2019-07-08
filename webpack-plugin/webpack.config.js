@@ -2,6 +2,7 @@ const path = require('path')
 const program = require('commander')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
 
 
@@ -59,6 +60,8 @@ module.exports = {
         // 定义全局环境变量
         new webpack.DefinePlugin({
             'ENVVIROMENT': isDev ? JSON.stringify('devploment') : JSON.stringify('production')
-        })
+        }),
+        // 好像没有卵用-不会刷新当前页面，而是又新打开个页面
+        // new OpenBrowserPlugin({ url: 'http://localhost:8084' })
     ],
 }
