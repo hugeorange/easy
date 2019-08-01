@@ -25,6 +25,9 @@
 
 3. 重复打开窗口插件 - `open-browser-webpack-plugin`
 
-4. babel7 webapck 4 模块化，代码转义，写篇总结文章`（本周内）`
+4. babel7 webapck 4 模块化，代码转义 `import export `，写篇总结文章`（本周内）`
+  - babel 转码后的代码
+  - webapack 转码后的代码
+
 
 5. webpack、react、vue 第三方ui库 模块加载原理

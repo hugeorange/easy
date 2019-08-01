@@ -17,8 +17,12 @@
   "author": "YAOLEI",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
     "clean-webpack-plugin": "^3.0.0",
     "commander": "^2.20.0",
+    "core-js": "3",
     "html-webpack-plugin": "^3.2.0",
     "open-browser-webpack-plugin": "^0.0.5",
     "webpack": "^4.34.0",
