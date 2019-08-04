@@ -1,4 +1,10 @@
-const ccc = 111
-export default ccc
+const ddd = {
+    aaa: '你好啊'
+}
 
-export const c = '第一个测试的c'
+setTimeout(() => {
+    console.log('ddd-->', ddd)
+}, 5000)
+
+
+export {ddd}

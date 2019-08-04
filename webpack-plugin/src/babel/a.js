@@ -1,5 +1,6 @@
-const bjs = require('./b.js')
-console.log('bjs-->', bjs)
+import {c} from './c.js'
 
-export default bjs
+c.bbb = '额外增加的属性..'
+console.log(c)
+
 

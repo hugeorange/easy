@@ -3,15 +3,18 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.b = exports["default"] = void 0;
+exports.aaa = exports["default"] = void 0;
 var aaa = '我是aaa';
-var bbb = 111;
+exports.aaa = aaa;
+var bbb = '我是bbb';
+var ccc = '我是ccc'; // module.exports = {
+//     aaa,
+//     bbb
+// }
+
 var _default = bbb;
 exports["default"] = _default;
-var b = '第一个测试的b';
-exports.b = b;
-module.exports = bbb;
-module.exports = {
-  aaa: aaa,
-  bbb: bbb
-};
+exports.ccc = ccc;
+setTimeout(function () {
+  console.log('aaa-->', aaa);
+}, 5000);

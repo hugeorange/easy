@@ -1,12 +1,19 @@
 const aaa = '我是aaa'
-const bbb = 111
+const bbb = '我是bbb'
+const ccc = '我是ccc'
+
+
+// module.exports = {
+//     aaa,
+//     bbb
+// }
+
 export default bbb
 
-export const b = '第一个测试的b'
+export { aaa }
 
-module.exports = bbb
+exports.ccc = ccc
 
-module.exports = {
-    aaa,
-    bbb
-}
+setTimeout(() => {
+    console.log('aaa-->', aaa)
+}, 5000)

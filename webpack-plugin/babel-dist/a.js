@@ -1,12 +1,6 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
+var _c = require("./c.js");
 
-var bjs = require('./b.js');
-
-console.log('bjs-->', bjs);
-var _default = bjs;
-exports["default"] = _default;
+_c.c.bbb = '额外增加的属性..';
+console.log(_c.c);
