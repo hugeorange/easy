@@ -1,19 +1,9 @@
-const aaa = '我是aaa'
-const bbb = '我是bbb'
-const ccc = '我是ccc'
+//b.js   
+exports.B = '我是b模块';
 
+var a = require('./a.js');
+console.log('在 b.js 之中，输出a模块 ==>', a.A);
 
-// module.exports = {
-//     aaa,
-//     bbb
-// }
+exports.B = '我是修改后的b模块';
+console.log('b.js 执行完毕');
 
-export default bbb
-
-export { aaa }
-
-exports.ccc = ccc
-
-setTimeout(() => {
-    console.log('aaa-->', aaa)
-}, 5000)

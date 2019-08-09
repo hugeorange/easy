@@ -1,6 +1,13 @@
 "use strict";
 
-var _c = require("./c.js");
+var _c = _interopRequireDefault(require("./c.js"));
 
-_c.c.bbb = '额外增加的属性..';
-console.log(_c.c);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var ccc = require('./c.js');
+
+console.log(_c["default"], ccc);
+setTimeout(function () {
+  console.log('sett-->', _c["default"]);
+  console.log('ccc->', ccc);
+}, 4000);

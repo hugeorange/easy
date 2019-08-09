@@ -1,6 +1,9 @@
-import {c} from './c.js'
+exports.A = '我是a模块';
 
-c.bbb = '额外增加的属性..'
-console.log(c)
+var b = require('./b.js');
+console.log('在 a.js 之中， 输出的 b模块==> ', b.B);
 
+exports.A = '我是后期修改过的a模块';
+
+console.log('a.js 执行完毕');
 
