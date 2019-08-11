@@ -1,9 +1,16 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-11 16:34:21
+ * @LastEditTime: 2019-08-11 17:54:35
+ * @LastEditors: Please set LastEditors
+ -->
 - npx babel src/babel --out-dir babel-dist
 
-- [javaScript七日谈](https://huangxuan.me/2015/07/09/js-module-7day/)
+- [javaScript模块七日谈](https://huangxuan.me/2015/07/09/js-module-7day/)
 
 ---
-- `从此处开始`
+## commonjs & ES module & babel转码 & webpack转码
 #### CommonJS 
 - 简述
 ```
@@ -90,7 +97,7 @@ b.js 执行到第二行，遇到 require a.js ，从缓存中拿出刚刚 a.js �
 
 ```
 
-- `循环引用注意点`：由于 commonjs 模块遇到循环加载时，返回的是当前已经执行的部分的值，而不是全部代码之后的值，两者可能会有差异，所以输入变量的时候必须非常小心，使用 `var a = require('a')` 而不是 `var a = require('a').foo`
+- `循环引用注意点`：由于 `commonjs` 模块遇到循环加载时，返回的是当前已经执行的部分的值，而不是全部代码之后的值，两者可能会有差异，所以输入变量的时候必须非常小心，使用 `var a = require('a')` 而不是 `var a = require('a').foo`
 
 
 
@@ -124,7 +131,7 @@ import 'lodash';
 import * as circle from './circle';
 
 ```
-- `简述:` ES6 模块不是对象，而是通过export命令显式指定输出的代码，再通过import命令输入，它的接口只是一种静态定义，在代码静态解析阶段就会生成。
+- `简述:` ES6 模块不是对象，而是通过`export`命令显式指定输出的代码，再通过`import`命令输入，它的接口只是一种`静态定义`，在`代码静态解析阶段`就会生成。
 
 ```
 // ES6模块
@@ -161,17 +168,41 @@ webpack 2.x 之后，有一个魔力注释的功能，会把加载的模块重�
 ```
 // 此处是对比
 
-- CommonJS 模块时运行时加载，ES6模块时 编译时 输出接口
+CommonJS 模块时运行时加载 -- 值得拷贝
+ES6模块时 编译时 输出接口 -- 值得引用
+
+commonjs 模块只会加载一次，以后在 碰到 require 同样的东西就从缓存里面加载
+
+如果把原模块导出的东西改变，引入模块不会跟着改变，还是从缓存里面取原来的值
 
 ES6模块的运行机制与CommonJS不一样，它遇到模块加载命令import时，不会去执行模块，而是只生成一个动态的只读引用。
-等到真的需要用到时，再到模块里面去取值，
+等到真的需要用到时，再到模块里面去取值
+
 换句话说，ES6的输入有点像Unix系统的“符号连接”，原始值变了，import输入的值也会跟着变。
 因此，ES6模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。
+
+commonjs：
+    module.exports = {}
+    exports  
+    运行阶段才加载模块，可以使用逻辑语句
+    模块就是对象加载的就是该对象
+    加载的是整个模块即将所有的接口都加载进来
+    输出的是值得拷贝，原模块发生变化不会影响已经加载的
+    this 指向当前的模块
+
+es6 模块
+    export 可以输出多个 {}
+    export default 
+    解析阶段确定对外的接口，解析阶段输出接口，不可以使用逻辑语句
+    加载的模块不是对象
+    可以单独加载其中的几个模块
+    静态分析，动态引用输出的是值得引用，原模块变化会影响已加载的模块
+    this 指向 underfined
 ```
 
 #### Babel 转换 ES6 的模块化语法
 ```
-Babel 的作用之一就是将 ES6 转换成 CommonJS 规范
+Babel 对 ES6 模块转码就是转换成 CommonJS 规范
 
 模块输出语法转换
 Babel 对于模块输出的转换，就是把所有输出都赋值到 exports 对象的属性上，并加上 ESModule: true 的标识
@@ -184,46 +215,19 @@ var _c = require('./a.js')
 然后取 _c.a 
 
 对于 default
+import a from './a'
+import {default as a} from './a'
 
-import a from './a' ==> import {default as a} from './a'
-
-babel转义时的处理
-引入了一个 函数
+babel转义时的处理，引入了一个 函数
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {'default': obj}
 }
-
 var _a = _interopRequireDefault(require("./a.js"));
 console.log(_a["default"]);
+
 // 意思就是如果不是 esmodule 就为其手动添加个 default 属性，取值时统一取 default
 ```
+- 有个疑问：babel 为什么 会把 `export export.default` 导出的模块转换为 `exports.xxx 和 exports.default` 呢？而不是 `module.exports` ??? 
+- `我没有找到解释，如果您知道，麻烦给我留言下`
 
-
-- babel 为什么 会把 `export export.default` 导出的模块转换为 `exports.xxx 和 exports.default` 呢
-
-- 命令行翻墙
-
-#### 简述
-- es6 模块 -- 动态更新
-- commonjs -- 值的缓存不存在动态更新
-- es6 模块 import 和 export 必须出现在模块顶层，如果处在条件判断代码中，就没法做静态化了
-- import命令输入的变量都是只读的，因为它的本质是输入接口。也就是说，不允许在加载模块的脚本里面，改写接口。（否则会报错）
-- import 是编译阶段执行的，他会早于模块内的所有代码先执行
-- import * as xxx from '../xx'
-
-- ES6 模块
-```
-import {a} from './xxx.js'
-
-a.foo = 'hello'; // 合法操作
-
-但经过 babel 转义后，就不允许 动态设置新的属性了
-
-会报错
-
-
-commonjs 不会报错，但也不会影响原模块
-```
-
-- `ESModule 与 CommonJS 的关系`
-- 在 `webpack` 构建之后，都变成了 ----
+#### webpack 对 es6 模块和commonjs 的处理
