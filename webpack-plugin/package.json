@@ -4,8 +4,8 @@
   "description": "one webpack plugin for comps auto export in index.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf dist && webpack --config webpack.config.js --env=prod",
+    "test": "rm -rf dist && webpack --config webpack.config.js --env=dev",
     "dev": "webpack --progress --colors --watch",
     "devs": "webpack --progress --colors --params=123",
     "start": "webpack-dev-server --colors --progress --env=dev"
@@ -20,20 +20,16 @@
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "commander": "^2.20.0",
     "core-js": "3",
     "html-webpack-plugin": "^3.2.0",
-    "open-browser-webpack-plugin": "^0.0.5",
     "webpack": "^4.34.0",
     "webpack-cli": "^3.3.4",
     "webpack-dev-server": "^3.7.2"
   },
-  "dependencies": {
-    "lodash": "^4.17.11",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
-  },
+  "dependencies": {},
   "sideEffects": [
     "./src/",
     "*.css"

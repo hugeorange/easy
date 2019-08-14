@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-11 16:34:21
- * @LastEditTime: 2019-08-11 17:54:35
+ * @LastEditTime: 2019-08-14 19:21:47
  * @LastEditors: Please set LastEditors
  -->
 - npx babel src/babel --out-dir babel-dist
@@ -44,7 +44,7 @@ require 引入的是 module.exports 导出的东西
 
 为避免混乱/错误，一般导出模块只建议用 module.exports 
 
-一般第三方包都用这种方式导出 `modules.exports = exports = {}`
+一般第三方包都用这种方式导出 modules.exports = exports = {}
 ```
 - 循环引用问题 （`某个模块出现循环加载，就只输出已经执行的部分，还未执行的部分不会输出`）
 ```
@@ -151,7 +151,7 @@ import命令是编译阶段执行的，在代码运行之前。
 
 静态加载模块的好处：
 1. 不再需要UMD模块
-2. 浏览器API可以用模块格式提供，不必再做成全局变量，不再需要全局对象如：Math (可以像Python一样用模块倒入)
+2. 浏览器API可以用模块格式提供，不必再做成全局变量，不再需要全局对象如：Math (可以像Python一样用模块导入)
 ```
 - `动态 import`
 ```
@@ -162,6 +162,36 @@ import(模块路径) 返回 promise，从 then 的结果里拿到加载的模块
 
 webpack 2.x 之后，有一个魔力注释的功能，会把加载的模块重命名为你注释里的文字
 
+```
+#### ES6模块的浏览器加载
+- 传统方法加载js脚本
+```
+script type="application/javascript"
+
+异步加载： async defer
+脚本异步加载，不会阻塞dom结构的解析
+
+async：加载完立即执行，渲染引擎中断，待之脚本执行完继续渲染
+defer：加载完会等待页面渲染完毕及页面其他脚本执行完毕才会执行
+
+多个 async 执行没有顺序保证，多个 defer 有顺序保证 
+```
+- es6 模块加载
+```
+script type="module"
+
+浏览器对 type="module" 的处理和 defer 标志一致
+
+```
+- es6 模块的循环加载
+```
+ES6 处理“循环加载”与 CommonJS 有本质的不同。
+ES6 模块是动态引用，如果使用import从一个模块加载变量（即import foo from 'foo'），
+那些变量不会被缓存，而是成为一个指向被加载模块的引用，
+需要开发者自己保证，真正取值的时候能够取到值。
+
+es6 模块会在使用使用时才去加载对应的模块
+如果是循环应用，可以将对应的输出改写成函数形式，利用函数的变量提升功能
 ```
 
 #### CommonJS 与 ES Module 的对比
@@ -178,9 +208,9 @@ commonjs 模块只会加载一次，以后在 碰到 require 同样的东西就�
 ES6模块的运行机制与CommonJS不一样，它遇到模块加载命令import时，不会去执行模块，而是只生成一个动态的只读引用。
 等到真的需要用到时，再到模块里面去取值
 
+JS 引擎对脚本静态分析的时候，遇到模块加载命令import，就会生成一个只读引用。等到脚本真正执行时，再根据这个只读引用，到被加载的那个模块里面去取值。
 换句话说，ES6的输入有点像Unix系统的“符号连接”，原始值变了，import输入的值也会跟着变。
-因此，ES6模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。
-
+ES6 模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。
 commonjs：
     module.exports = {}
     exports  
