@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" name="" id="input1">
+    <div></div>
+    <canvas id="canvas1" style="border: 2px solid"></canvas>
+    <!-- <canvas id="canvas2" style="border: 2px solid"></canvas> -->
+    <img src="./111.png" id="img2" alt="" >
+    <img src="" id="img0" alt="" width="300px">
+    <img src="" id="img1" width="200px">
+    
+    <!-- style="width: 300px; height: 166px" -->
+    <div id="div2"></div>
+</body>
+<script>
+    var input1 = document.querySelector('#input1')
+    var canvas = document.querySelector('#canvas1')
+    var canvas2 = document.querySelector('#canvas2')
+    var img0 = document.querySelector('#img0')
+    var img1 = document.querySelector('#img1')
+    var img2 = document.querySelector('#img2')
+    var div2 = document.querySelector('#div2')
+
+    /* 
+        按指定比例裁剪图片并压缩图片
+
+        思路：
+        1. 获取图片 file 对象  
+            change 事件 ==> 
+            URL.createObjectURL(file) 返回 图片 blob 地址
+            或者
+            FileReader 类 ==> reader.readAsDataURL(file)  获取图片 base64 文件
+
+        2. 将拿到的图片文件赋值给 img.src，并获取图片的原始尺寸
+
+        3. 根据与 目标图片 尺寸比例相对比，计算处需要裁剪的参数 sx, sy, swidth, sheight
+
+        4. 利用 ctx.drawImage 9 参数方法进行裁剪
+
+        5. 利用 canvas.toDataURL(type, encoderOptions)
+
+        6. 将 base64 格式图片转换为 blob 二级制式格式
+
+        // 第二种截取思路
+        直接将原图按比例缩放后（宽至1280或高至800时），利用 drawImage 5 参数，绘制到 canvas 上
+        然后利用 ctx.clip 裁剪
+        ctx.getImageData 获取裁剪区的图片信息
+        ctx.putImageData 将裁剪后的图片信息重新画到一个新的 canvas 上
+        然后 canvas.toDataURL 获取图片对象
+     */
+
+    // clip 裁剪方法： https://zhuanlan.zhihu.com/p/44959058 
+    // 动态裁剪dalic：https://juejin.im/post/5a0cff01518825592c07a766
+    // drawImage模糊 https://segmentfault.com/q/1010000002391424
+    // drawImage 9参数解析 https://www.canvasapi.cn/CanvasRenderingContext2D/drawImage#&examples
+    // base64 转 blob https://segmentfault.com/a/1190000000754560
+
+
+    // URL 特性
+    function urlGetFile() {
+        input1.onchange = function() {
+            var url = window.URL || window.webkitURL;
+            var img = new Image();
+            img.src = url.createObjectURL(this.files[0]);
+            img.onload = function () {
+                console.log(this.height, this.width)
+            }
+        }
+    }
+
+
+    // h5 FileReader
+    input1.onchange = function () {
+        var reader = new FileReader();
+        console.log(this.files)
+        reader.readAsDataURL(this.files[0]);
+        reader.onload = function(e){
+            var img = new Image();
+            img.src = e.target.result;
+            img.onload = function () {
+                var obj = calcImgSize(this.width, this.height)
+                createCtxDrawImage(img, obj)
+                console.log('height:'+this.height+'----width:'+this.width)
+            }
+        }
+    }
+
+
+
+    // 利用 clip 裁剪图片
+    function createCtxClip(img) {
+        // 此处不可写 canvas.style.width ，否则计算样式会不准确
+        /*
+            canvas 画板和画纸
+            style 只会改变画板的宽高
+            .width .height 会同时改变画板和画纸
+            如果在作图时出现 线段扭曲，多半是因为 设置css属性导致的
+        */
+        canvas.width = 600
+        canvas.height = 332
+        canvas.style.width = '300px'
+        canvas.style.height = "166px"
+
+        var ctx=canvas.getContext("2d");
+
+        ctx.beginPath();
+        ctx.rect(100, 0, 400, 332);
+        ctx.stroke();
+        ctx.clip()
+        ctx.closePath();
+
+        ctx.drawImage(img, 0, 0, 600, 332)
+
+        
+        var data = canvas.toDataURL();
+        img0.src = data
+        var res = getBase64Image(ctx, 100, 0, 400, 332)
+        img1.src = res
+    }
+
+    function getBase64Image(context, x1, y1, x2, y2) {
+        var dataImg = context.getImageData(x1, y1, x2, y2);
+        var canvas2 = document.createElement("canvas");
+        var context2 = canvas2.getContext("2d");
+        canvas2.width = x2;
+        canvas2.height = y2;
+        context2.putImageData(dataImg, 0, 0, 0, 0, x2, y2);
+        var res = canvas2.toDataURL('image/jpeg', 1.0);
+        return res;
+    }
+
+
+
+    function createCtxDrawImage(img, obj) {
+        console.log(img, obj)
+        canvas.width = obj.sWidth
+        canvas.height = obj.sHeight
+        canvas.style.width = obj.sWidth/2 + 'px'
+        canvas.style.height = obj.sHeight/2 + 'px'
+        var ctx=canvas.getContext("2d");
+        ctx.drawImage(img, obj.sx, obj.sy, obj.sWidth, obj.sHeight, 0, 0, obj.sWidth, obj.sHeight)
+
+        var data = canvas.toDataURL('image/jpeg', 0.6);
+        var blob = createBlob(data)
+        console.log('处理后的图片data-->', data, blob)
+        img0.src = data
+    }
+
+    // 将base64字符出转成blob二级制格式利用 formData ajax 传到后台
+    function createBlob(base64) {
+        // dataURL 的格式为 “data:image/png;base64,****”,逗号之前都是一些说明性的文字，我们只需要逗号之后的就行了
+        var data = base64.split(',')[1];
+        var data = window.atob(data);
+        var ia = new Uint8Array(data.length);
+        for (var i = 0; i < data.length; i++) {
+            ia[i] = data.charCodeAt(i);
+        };
+        var blob=new Blob([ia], {type:"image/jpeg"});
+        return blob
+    }
+
+
+
+
+
+
+    img2.onload = function() {
+        console.log(img2, this.width, this.height)
+
+        var obj = calcImgSize(this.width, this.height)
+        createCtxDrawImage(img2, obj)
+    }
+
+
+
+
+
+    // 计算图片宽高 缩放到 目标尺寸 1280*800
+    function calcImgSize(w, h) {
+        var rate = 1280 / 800 // 1.6
+        var iRate = w / h
+        // 截宽
+        if (iRate > rate) {
+            var sWidth = h*rate
+            var sHeight = h
+            var sx = (w - sWidth)/2
+            var sy = 0
+        } else { // 截高情况下
+            var sWidth = w
+            var sHeight = w/rate 
+            var sx = 0
+            var sy = (h - sHeight)/2
+        }
+        return {
+            sx,
+            sy,
+            sWidth,
+            sHeight
+        }
+    }
+</script>
+</html>
