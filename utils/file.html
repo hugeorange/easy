@@ -10,10 +10,10 @@
     <input type="file" name="" id="input1">
     <div></div>
     <canvas id="canvas1" style="border: 2px solid"></canvas>
-    <!-- <canvas id="canvas2" style="border: 2px solid"></canvas> -->
-    <img src="./111.png" id="img2" alt="" >
-    <img src="" id="img0" alt="" width="300px">
-    <img src="" id="img1" width="200px">
+    <canvas id="canvas2" style="border: 2px solid"></canvas>
+    <img src="./111.png" id="img2" style="height: 400px" >
+    <img src="" id="img0" height="400">
+    <img src="" id="img1" height="400">
     
     <!-- style="width: 300px; height: 166px" -->
     <div id="div2"></div>
@@ -61,6 +61,14 @@
     // drawImage 9参数解析 https://www.canvasapi.cn/CanvasRenderingContext2D/drawImage#&examples
     // base64 转 blob https://segmentfault.com/a/1190000000754560
 
+    // canvas 宽高 canvas.style.width ，否则计算样式会不准确
+    /*
+        canvas 画板和画纸
+        style 只会改变画板的宽高
+        .width .height 会同时改变画板和画纸
+        如果在作图时出现 线段扭曲，多半是因为 设置css属性导致的
+    */
+
 
     // URL 特性
     function urlGetFile() {
@@ -84,59 +92,89 @@
             var img = new Image();
             img.src = e.target.result;
             img.onload = function () {
-                var obj = calcImgSize(this.width, this.height)
-                createCtxDrawImage(img, obj)
-                console.log('height:'+this.height+'----width:'+this.width)
+                // drawImage + clip 方式
+                var obj = calcSize(this.width, this.height)
+                createCtxClip(img, obj)
+
+
+                // 单纯：drawImage 方式
+                // var obj = calcImgSize(this.width, this.height)
+                // createCtxDrawImage(img, obj)
+                // console.log('height:'+this.height+'----width:'+this.width)
             }
         }
     }
 
 
 
-    // 利用 clip 裁剪图片
-    function createCtxClip(img) {
-        // 此处不可写 canvas.style.width ，否则计算样式会不准确
-        /*
-            canvas 画板和画纸
-            style 只会改变画板的宽高
-            .width .height 会同时改变画板和画纸
-            如果在作图时出现 线段扭曲，多半是因为 设置css属性导致的
-        */
-        canvas.width = 600
-        canvas.height = 332
-        canvas.style.width = '300px'
-        canvas.style.height = "166px"
+    // 计算当 图片 宽高达到 1200、800 时的实际宽高尺寸
+    // 边界长图、宽图需要 特殊计算 尺寸
+    function calcSize(w, h) {
+        var ow = 1280
+        var oh = 800
+        var rate = 1280 / 800 // 1.6
+        var iRate = w / h
+        if (iRate > rate) {
+            var resultR = oh  / h
+            var resultW = w * resultR
+            var resultH = oh
+        } else {
+            var resultR = ow  / w
+            var resultH = h * resultR
+            var resultw = ow
+        }
 
-        var ctx=canvas.getContext("2d");
+        var sx = (resultW - ow) / 2
+        var sy = (resultH - oh) / 2
+        return {
+            sx,
+            sy,
+            w: resultW,
+            h: resultH,
+            ow,
+            oh
+        }
+    }
+    // 利用 clip 裁剪图片
+    function createCtxClip(img, obj) {
+        console.log(obj)
+        const { sx, sy, w, h, ow, oh } = obj
+        canvas.width = w
+        canvas.height = h
+        canvas.style.width = w / 2 + 'px'
+        canvas.style.height = h / 2 + "px"
+
+        var ctx = canvas.getContext("2d");
 
         ctx.beginPath();
-        ctx.rect(100, 0, 400, 332);
+        ctx.rect(sx, sy, ow, oh);
         ctx.stroke();
         ctx.clip()
         ctx.closePath();
 
-        ctx.drawImage(img, 0, 0, 600, 332)
+        ctx.drawImage(img, 0, 0, w, h)
 
-        
         var data = canvas.toDataURL();
-        img0.src = data
-        var res = getBase64Image(ctx, 100, 0, 400, 332)
+        var res = getBase64Image(ctx, sx, sy, ow, oh)
         img1.src = res
     }
 
-    function getBase64Image(context, x1, y1, x2, y2) {
-        var dataImg = context.getImageData(x1, y1, x2, y2);
-        var canvas2 = document.createElement("canvas");
-        var context2 = canvas2.getContext("2d");
-        canvas2.width = x2;
-        canvas2.height = y2;
-        context2.putImageData(dataImg, 0, 0, 0, 0, x2, y2);
-        var res = canvas2.toDataURL('image/jpeg', 1.0);
+    function getBase64Image(ctx, sx, sy, ow, oh) {
+        console.log(sx, sy, ow, oh)
+        var dataImg = ctx.getImageData(sx, sy, ow, oh);
+        var ctx2 = canvas2.getContext("2d");
+        canvas2.width = ow;
+        canvas2.height = oh;
+        canvas2.style.width = ow / 2 + 'px'
+        canvas2.style.height = oh / 2 + "px"
+        ctx2.putImageData(dataImg, 0, 0, 0, 0, ow, oh);
+        var res = canvas2.toDataURL('image/jpeg');
         return res;
     }
 
 
-
+    // https://juejin.im/post/5bec3c6cf265da614312a0fa
+    // 测试当图片原始尺寸超级大时候，绘制的 canvas 也超级大，会不会有性能问题，如有性能问题则使用第二种 clip 方法
     function createCtxDrawImage(img, obj) {
         console.log(img, obj)
         canvas.width = obj.sWidth
@@ -146,10 +184,12 @@
         var ctx=canvas.getContext("2d");
         ctx.drawImage(img, obj.sx, obj.sy, obj.sWidth, obj.sHeight, 0, 0, obj.sWidth, obj.sHeight)
 
-        var data = canvas.toDataURL('image/jpeg', 0.6);
+        // canvas.toBlob 方法 edge 不支持需要下面的方法进行 polyfill
+        var data = canvas.toDataURL('image/jpeg');
+        img0.src = data
+
         var blob = createBlob(data)
         console.log('处理后的图片data-->', data, blob)
-        img0.src = data
     }
 
     // 将base64字符出转成blob二级制格式利用 formData ajax 传到后台
@@ -170,18 +210,19 @@
 
 
 
-    img2.onload = function() {
-        console.log(img2, this.width, this.height)
+    // img2.onload = function() {
+    //     console.log(img2, this.width, this.height)
 
-        var obj = calcImgSize(this.width, this.height)
-        createCtxDrawImage(img2, obj)
-    }
+    //     var obj = calcImgSize(this.width, this.height)
+    //     createCtxDrawImage(img2, obj)
+    // }
 
 
 
 
 
     // 计算图片宽高 缩放到 目标尺寸 1280*800
+    // // 边界长图、宽图需要 特殊计算 尺寸
     function calcImgSize(w, h) {
         var rate = 1280 / 800 // 1.6
         var iRate = w / h
