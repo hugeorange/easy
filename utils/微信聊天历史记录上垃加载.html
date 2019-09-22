@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .divp {
+        height: 400px;
+        border: 2px solid green;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+    .div1 {
+        width: 300px;
+        margin: 0 auto;
+    }
+    .divc {
+        margin-bottom: 10px;
+        font-size: 20px;
+        border: 1px solid;
+    }
+    .tips {
+        padding: 5px;
+        text-align: center;
+        font-size: 12px;
+        color: #bbb;
+    }
+    .tips .loading {
+        display: none;
+        height: 20px;
+        width: 20px;
+        border-radius: 100%;
+        margin: 5px;
+        border: 1px solid #666;
+        border-bottom-color: transparent;
+        vertical-align: middle;
+        animation: loading 0.75s linear infinite;
+    }
+    @keyframes loading {
+        0% { transform: rotate(0deg) }
+        50% { transform: rotate(180deg) }
+        100% { transform: rotate(360deg)} 
+    }
+</style>
+<body>
+    <div class="divp">
+        <div class="tips">
+            <span class="load-tips">下拉加载更多数据</span>
+            <span class="loading"></span>
+        </div>
+        <div class="div1"></div>
+    </div>
+</body>
+<script>
+    /**
+        模仿微信聊天上啦加载历史记录，但但当前信息不发生变化
+    */
+    var HistoryChat = {
+        div1: document.querySelector('.div1'),
+        divp: document.querySelector('.divp'),
+        body: document.querySelector('body'),
+        tips: document.querySelector('.tips'),
+        loading: document.querySelector('.loading'),
+        loadTips: document.querySelector('.load-tips'),
+        scrollH: 0, // 内容高度
+        count: 0,
+        init() {
+            this.initView()
+            this.initIcrollTop()
+        },
+        initView() {
+            const divs = this.createEl()
+            this.div1.appendChild(divs)
+            this.adjustScroll()
+        },
+        adjustScroll() {
+            if (!this.scrollH) {
+                this.scrollH = this.div1.offsetHeight
+                this.divp.scrollTop = this.scrollH
+            } else {
+                let ch = this.div1.offsetHeight
+                this.divp.scrollTop = ch - this.scrollH
+                this.scrollH = ch
+            }
+        },
+        createEl(nums=30) {
+            var fragment = document.createDocumentFragment()
+            for(let i = 0; i < nums; i++){
+                let div = document.createElement('div')
+                div.classList.add('divc')
+                div.innerHTML = `第${this.count} - ${i} 次内容`
+                fragment.appendChild(div)
+            }
+            return fragment
+        },
+        initIcrollTop() {
+            this.divp.addEventListener('scroll', e => {
+                console.log(e.target.scrollTop)
+                let top = e.target.scrollTop
+                if (top == 0) {
+                    console.log('触顶...')
+                    this.touchTop()
+                }
+            })
+        },
+        async touchTop() {
+            this.setTopTips(true)
+            const divs = await this.ajaxResponse()
+            this.div1.insertBefore(divs, this.div1.childNodes[0])
+            this.adjustScroll()
+            this.setTopTips(false)
+        },
+        
+        setTopTips(showLoading) {
+            if (showLoading) {
+                this.loadTips.style.display = 'none'
+                this.loading.style.display = 'inline-block'
+            } else {
+                this.loadTips.style.display = ''
+                this.loading.style.display = 'none'
+            }
+        },
+        ajaxResponse() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    ++this.count
+                    resolve(this.createEl(10))
+                }, 3000)
+            })
+        },
+        // stringToDom(string) {
+        //     var div = document.createElement('div')
+        // 　　 div.innerHTML = string;
+        //     return div.childNodes;
+        // }
+    }
+    HistoryChat.init()
+    // https://segmentfault.com/a/1190000014423308
+</script>
+</html>
