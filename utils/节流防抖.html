@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>疯狂点击</h1>
+</body>
+<script>
+var h1 = document.querySelector('h1')
+
+var throttleClick = throttle1(function() {
+    console.log('不立即执行的throttle')
+}, 1500, true)
+
+
+var  debounceClick = debounce(function() {
+    console.log('防抖的执行...', new Date())
+}, 1500, false)
+
+// h1.addEventListener('click', throttleClick)
+h1.addEventListener('click', debounceClick)
+
+// 初始时 立即执行，然后在 wait 阈值内执行
+function throttle(fn, wait) {
+    let t1 = 0
+    return function() {
+        let ctx = this
+        let args = arguments
+        let t2 = Date.now()
+        if (t2 - t1 >= wait) {
+            t1 = t2
+            fn.call(ctx, ...args)
+        }
+    }
+}
+
+// 结合版本：初始时不立即执行，直到超过一个阈值才执行
+function throttle1(fn, wait, isFrist) {
+    let t1 = 0
+    return function() {
+        let ctx = this
+        let args = arguments
+        let t2 = Date.now()
+        t1 = !t1 && isFrist ? Date.now() : t1
+        if (t2 - t1 >= wait) {
+            t1 = t2
+            fn.call(ctx, ...args)
+        }
+    }
+}
+
+
+// 防抖函数--防反跳函数
+
+// 连续点击不会执行需等待时间超过间隔时间才会执行
+function debounce0(fn, wait) {
+    let timer = null
+    return function() {
+        let ctx = this
+        let args = arguments
+        if (timer) {
+            clearInterval(timer)
+            timer = null
+        }
+        timer = setTimeout(() => {
+            fn.call(ctx, ...args)
+        }, wait)
+    }
+}
+
+// 立即调用版本的 debounce 并且在 wait 时间内不会在执行
+function debounce1(fn, wait, immediate) {
+    let timer
+    return function() {
+        if (timer) {
+            clearInterval(timer)
+        }
+        if (!timer && immediate) {
+            fn.call(this)
+        }
+        timer = setTimeout(() => {
+            timer = null
+        }, wait)
+    }
+}
+
+// 结合版本
+function debounce(fn, wait, immediate) {
+    let timer
+    return function() {
+        if (immediate) {
+            if (!timer) {
+                fn.call(this)
+            } else {
+                clearTimeout(timer)
+            }
+            timer = setTimeout(() => timer = null, wait)
+        } else {
+            if (timer) {
+                clearTimeout(timer)
+                timer = null
+            } 
+            timer = setTimeout(() => fn.call(this), wait)
+        }
+    }
+}
+
+</script>
+</html>
