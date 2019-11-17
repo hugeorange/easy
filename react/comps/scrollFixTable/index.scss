@@ -1,0 +1,128 @@
+.table-wrap-views {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    box-sizing: border-box;
+
+    .table-views {
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        background-color: #fff;
+        width: 100%;
+        &.table-views-title {
+            background-color: #19191b;
+            tr td {
+                border-right: 1px solid transparent;
+            }
+            .table-header-left {
+                float: left;
+            }
+            .table-header-right {
+                overflow: hidden;
+            }
+        }
+        &.table-views-body {
+            border: 1px solid black;
+            tr:nth-child(2n+1) {
+                background-color: #969ba3;
+            }
+            tr td {
+                border-right: 1px solid black;
+            }
+            .table-body-left {
+                float: left;
+            }
+            .table-body-right {
+                overflow: scroll;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+
+        .cell {
+            width: 60px;
+            font-size: 14px;
+            color: #bfd2ef;
+            height: 20px;
+            line-height: 20px;
+            padding: 5px;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+        }
+    }
+    &.table-header-sticky {
+        padding-top: 30px;
+        .table-views-title {
+            position: fixed;
+            top: 0;
+            z-index: 1;
+        }
+    }
+}
+
+    // .table-views {
+    //     position: relative;
+    //     overflow: hidden;
+    //     padding: 0;
+    //     background-color: #fff;
+    //     table {
+    //         width: 100%;
+    //     }
+    //     .v-table-header {
+    //         overflow: hidden;
+    //         background-color: #19191b;
+    //         tr td {
+    //             border-right: 1px solid transparent;
+    //         }
+    //     }
+    //     &.table-views-right {
+    //         .v-table-header {
+    //             width: 100%;
+    //         }
+    //     }
+
+
+    //     .v-table-body {
+    //         width: 100%;
+    //         overflow: scroll;
+    //         -webkit-overflow-scrolling: touch;
+    //         border-bottom: 1px solid black;
+    //         tr:nth-child(2n+1) {
+    //             background-color: #969ba3;
+    //         }
+    //         tr td {
+    //             border-right: 1px solid black;
+    //         }
+    //     }
+    //     .title-cell {
+    //     }
+    //     .body-cell {
+
+    //     }
+    //     .cell {
+    //         width: 60px;
+    //         font-size: 14px;
+    //         color: #bfd2ef;
+    //         height: 20px;
+    //         line-height: 20px;
+    //         padding: 5px;
+    //         overflow: hidden;
+    //         text-overflow:ellipsis;
+    //         white-space: nowrap;
+    //     }
+    // }
+    // .table-views-left {
+    //     float: left;
+    // }
+
+    // &.table-header-sticky {
+    //     padding-top: 30px;
+    //     .v-table-header {
+    //         position: fixed;
+    //         top: 0;
+    //         z-index: 1;
+    //     }
+    // }
+// }
