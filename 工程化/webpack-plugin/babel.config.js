@@ -4,7 +4,12 @@ const presets = [
     {
       modules: false
     }
-  ]
+  ],
+  ["@babel/preset-react"]
 ];
 
-module.exports = { presets };
+const plugins = [
+  ["extract", { "library": "lodash" }],
+]
+
+module.exports = { presets, plugins };
