@@ -51,14 +51,18 @@
 ## babel & babylon & ast
   ![RUNOOB 图标](https://camo.githubusercontent.com/868eee501ac4960259c154a510c6fe9257df8221/68747470733a2f2f696d672e616c6963646e2e636f6d2f7466732f5442315547435165564f5742754e6a7930466958585846785658612d323036362d313135322e706e675f3132303078313230302e6a7067)
 
+> Babel是JavaScript编译器，更确切的说是源码到源码的编译器，通常也叫做转换编译器。
+
 > babel 是一个编译器（输入源码 => 输出编译后的代码），编译过程分为三个阶段：解析、转换和打印输出，Babel 虽然开箱即用，但什么动作都不做，他基本上类似于 `const babel = code => code`，将代码解析之后在输出同样的代码，如果想要Babel做一些实际的工作，就需要为其添加插件
 
 
-- `babel-plugin-import` 分析，看不懂啊啊啊啊啊啊啊...
 
 - Parser --> Traversal --> Transform --> Generator ==> 解析、遍历、转换、生成
-- AST abstract syntax tree
-- ast 中的节点都是继承自 Node 节点，Node 节点有 type 和 Ioc 两个属性，分别代表类型和位置
+  - AST abstract syntax tree
+  - ast 中的节点都是继承自 Node 节点，Node 节点有 type 和 Ioc 两个属性，分别代表类型和位置
+
+### 静态分析
+> 静态分析是在不需要执行代码的前提下对代码进行分析的处理工程（执行代码的同时进行代码分析即是动态分析），静态分析带来的好处非常多，可用于 语法检查、代码高亮、代码转换、优化、压缩场景
 
 - babel 相关周边
 ```
@@ -73,3 +77,109 @@ Babel 的后序工作 -- Babel-generator、AST 树转换成源码
 babel 的插件体系 -- 结点的转换定义
 babel 的插件就是定义如何转换当前结点，babel 插件能做的事情就只要转换 ast 树
 ```
+- ast 解析流程
+```
+源码：
+
+function square(n) {
+  return n * n;
+}
+
+// ast
+{
+  type: "FunctionDeclaration",
+  id: {
+    type: "Identifier",
+    name: "square"
+  },
+  params: [{
+    type: "Identifier",
+    name: "n"
+  }],
+  body: {
+    type: "BlockStatement",
+    body: [{
+      type: "ReturnStatement",
+      argument: {
+        type: "BinaryExpression",
+        operator: "*",
+        left: {
+          type: "Identifier",
+          name: "n"
+        },
+        right: {
+          type: "Identifier",
+          name: "n"
+        }
+      }
+    }]
+  }
+}
+```
+- 这样的每一层结构也被叫做节点（Node），一个AST可以由单一的节点或是成百上千个节点构成，他们组合在一起可以描述用于静态分析的语法，
+- 每一个节点都有如下所示的接口
+```
+interface Node {
+    type: string
+}
+字符串形式的 type 字段表示节点类型，如：FunctionDeclaration、Identifier、BinaryExpression
+每一种类型的节点定义了一些附加属性用来进一步描述该节点类型
+
+Babel 还未每个节点额外生成了一些属性，用于描述该节点在原始代码中的位置
+{
+    type: ...,
+    start: 0,
+    end: 38,
+    loc: {
+        start: {
+            line: 1,
+            column: 0
+        },
+        end: {
+            line3,
+            column: 1
+        }
+    }
+}
+每个节点都会有 start end loc 这几个属性
+```
+### babel 的处理步骤
+- Babel 的三个主要处理步骤分别是：解析 - 转换 - 生成
+- 解析步骤接收代码并输出 AST，底层依赖 `Babylon` 解析器 这个步骤分为两个阶段：`词法分析(Lexical Analyis)`, `语法分析(Syntactic Analyis)`
+  - 词法分析：把字符串形式的代码转换为 令牌(token)流，令牌类似于 AST中的节点
+  - 语法分析：把令牌流转换成 AST 形式，这个阶段会使用令牌中的信息把他们转换成一个 AST 的表述结构
+
+- 转换：接收 AST 并对其进行遍历，在此过程中进行添加、更新及移除等操作。这是babel或是其他编译器中最复杂的过程同时也是插件将要介入工作的部分
+- 生成：代码生成步骤最终（经过一些列转换之后）的ast转换成字符串形式的代码，同时还会创建源码映射（source maps），代码生成其实很简单：深度优先遍历整个AST，然后构建可以表示转换后代码的字符串
+- 深度优先 树形遍历
+
+- 遍历过程
+```
+类型：
+  FunctionDeclaration
+  Identifier            标识符
+  BlockStatement        块语句 {}
+  ReturnStatement       返回语句
+  BinaryExpression      二元表达式语句
+
+```
+### API
+- babylon：Babylon 是 Babel 的解析器，最初从 Acorn项目fork出来的
+```
+babylon.parse(code, {
+  source: "module", // moudle 严格模式执行，script 默认行为
+  plugin: ...
+})
+```
+- babel-traverse：遍历 ==> 维护了整棵树的状态，并且负责模块替换、移除和添加节点
+- babel-types: t 
+
+### 参考文档
+- [babel插件入门-AST（抽象语法树）](https://juejin.im/post/5ab9f2f3f265da239b4174f0)
+- [babel官网](https://www.babeljs.cn/docs/presets)
+- [李靖 babel-plugin-ast](https://github.com/barretlee/babel-plugin-ast)
+- [ast解析](https://astexplorer.net/)
+- [babel-ast文档](https://github.com/jamiebuilds/babel-handbook/blob/master/translations/zh-Hans/plugin-handbook.md)
+- [babel-介绍文档](https://github.com/jamiebuilds/babel-handbook/blob/master/translations/zh-Hans/user-handbook.md)
+- [开发babel插件](https://fanerge.github.io/2018/Babel%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%8F%8ABabel%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91%E6%8E%A2%E7%B4%A2.html)
+- [开发babel插件-1+1](https://juejin.im/post/5a9315e46fb9a0633a711f25)
