@@ -201,3 +201,38 @@ var _button = require('antd/lib/button');
 - [babel-介绍文档](https://github.com/jamiebuilds/babel-handbook/blob/master/translations/zh-Hans/user-handbook.md)
 - [开发babel插件](https://fanerge.github.io/2018/Babel%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%8F%8ABabel%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91%E6%8E%A2%E7%B4%A2.html)
 - [开发babel插件-1+1](https://juejin.im/post/5a9315e46fb9a0633a711f25)
+
+
+
+### 展示代码
+```
+url地址：https://astexplorer.net/
+
+import { cloneDeep, get } from 'lodash'
+
+export default function (babel) {
+  const { types: t } = babel;
+  
+  return {
+    visitor: {
+ImportDeclaration(path, _ref = {opts:{}}){
+        const specifiers = path.node.specifiers; // 说明符 
+        const source = path.node.source;         // source 来源
+       // 判断是不是来自 import
+       if (!t.isImportDefaultSpecifier(specifiers[0]) ) {
+	         //遍历  cloneDeep get
+            var declarations = specifiers.map((specifier) => {  
+			      //创建importImportDeclaration节点
+              return t.ImportDeclaration(                     
+                [t.importDefaultSpecifier(specifier.local)],
+                t.StringLiteral(`${source.value}/${specifier.local.name}`)
+              )
+            })
+            path.replaceWithMultiple(declarations)
+        }
+      }
+    }
+  };
+}
+
+```
