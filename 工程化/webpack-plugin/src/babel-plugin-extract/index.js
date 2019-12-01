@@ -1,21 +1,28 @@
-module.exports = function ({ types: t }) {
+export default function (babel) {
+    const { types: t } = babel;
+    
     return {
-        // 对import转码
-        visitor: {
-            ImportDeclaration(path, _ref = { opts: {} }) {
-                const specifiers = path.node.specifiers;
-                const source = path.node.source;
-                // 只有libraryName满足才会转码
-                if (_ref.opts.library == source.value && (!t.isImportDefaultSpecifier(specifiers[0]))) { //_ref.opts是传进来的参数
-                    var declarations = specifiers.map((specifier) => {      //遍历  uniq extend flatten cloneDeep
-                        return t.ImportDeclaration(                         //创建importImportDeclaration节点
-                            [t.importDefaultSpecifier(specifier.local)],
-                            t.StringLiteral(`${source.value}/${specifier.local.name}`)
-                        )
-                    })
-                    path.replaceWithMultiple(declarations)
-                }
-            }
+      visitor: {
+        // 路径节点、插件选项
+        ImportDeclaration(path, _ref = {opts:{}}){
+          const specifiers = path.node.specifiers; // 说明符 
+          const source = path.node.source;         // source 来源
+         // 判断是不是来自 import
+         if (!t.isImportDefaultSpecifier(specifiers[0]) ) {
+               //遍历  cloneDeep get
+              var declarations = specifiers.map((specifier) => {  
+                //创建importImportDeclaration节点
+                return t.ImportDeclaration(                     
+                      [t.importDefaultSpecifier(specifier.local)],
+                      t.StringLiteral(`${source.value}/${specifier.local.name}`)
+                  )
+              })
+              path.replaceWithMultiple(declarations)
+  
+          }
+    
         }
+      }
     };
-}
+  }
+  

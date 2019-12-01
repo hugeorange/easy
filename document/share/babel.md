@@ -30,7 +30,7 @@
             chrome: 53,
             ...
         },
-        useBuiltIns: "usage",
+        useBuiltIns: "usage", // true/false/usage
         modules: false, // 开启 tree shanking
     }]
     ```
@@ -172,7 +172,25 @@ babylon.parse(code, {
 })
 ```
 - babel-traverse：遍历 ==> 维护了整棵树的状态，并且负责模块替换、移除和添加节点
-- babel-types: t 
+- babel-generator: 模块时babel 代码的生成器，他读取 AST 并将其转换为源码和源码的，映射
+- babel-types: 一个工具库包含构造、验证、以及变换 AST 节点的方法，拥有每一个单一节点的类型定义，包括节点包含哪些属性，什么是合法值，如何构建节点、遍历节点以及节点的别名等信息
+
+### 编写第一个 babel 插件
+1. 等号 左右值互换
+2. 按需加载 lodash
+```
+import { cloneDeep } from 'antd';
+      ↓ ↓ ↓ ↓ ↓ ↓
+var cloneDeep = require('lodash/cloneDeep');
+```
+3. 按需加载 antd 
+```
+
+import { Button } from 'antd';
+      ↓ ↓ ↓ ↓ ↓ ↓
+var _button = require('antd/lib/button');
+
+```
 
 ### 参考文档
 - [babel插件入门-AST（抽象语法树）](https://juejin.im/post/5ab9f2f3f265da239b4174f0)
