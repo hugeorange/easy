@@ -1,8 +1,10 @@
 const babel = require('@babel/core')
-// 我们的babel插件
+// types 从传入的 babel 中取出 types 即 @babel/types
 let MyVisitor = function({ types: t }) {
   return {
+    // 访问者模式，遍历访问每个特定类型的AST节点
     visitor: {
+      // 二元操作符
       BinaryExpression(path) {
         if (path.node.operator !== "===") return;
         // 改变当前节点的left、right

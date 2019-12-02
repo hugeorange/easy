@@ -1,3 +1,11 @@
+/**
+ * 
+  import { cloneDeep, get } from 'lodash';
+  ↓ ↓ ↓ ↓ ↓ ↓
+  import cloneDeep from 'lodash/cloneDeep'
+  import get from 'lodash/get'
+ */
+
 export default function (babel) {
     const { types: t } = babel;
     
@@ -11,16 +19,14 @@ export default function (babel) {
          if (!t.isImportDefaultSpecifier(specifiers[0]) ) {
                //遍历  cloneDeep get
               var declarations = specifiers.map((specifier) => {  
-                //创建importImportDeclaration节点
+                //创建importImportDeclaration节点，两个参数，后面的参数替代前面的
                 return t.ImportDeclaration(                     
                       [t.importDefaultSpecifier(specifier.local)],
                       t.StringLiteral(`${source.value}/${specifier.local.name}`)
                   )
               })
               path.replaceWithMultiple(declarations)
-  
           }
-    
         }
       }
     };
