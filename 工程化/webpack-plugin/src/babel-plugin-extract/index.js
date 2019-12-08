@@ -5,8 +5,7 @@
   import cloneDeep from 'lodash/cloneDeep'
   import get from 'lodash/get'
  */
-
-export default function (babel) {
+function myPlugin (babel) {
     const { types: t } = babel;
     
     return {
@@ -32,3 +31,4 @@ export default function (babel) {
     };
   }
   
+  module.exports = myPlugin

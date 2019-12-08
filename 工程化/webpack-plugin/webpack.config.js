@@ -22,7 +22,7 @@ program
 const isDev = program.env == "dev" ? true : false;
 
 module.exports = {
-  entry: "./index.js",
+  entry: ["./index.js"],
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].[contenthash:8].js"
