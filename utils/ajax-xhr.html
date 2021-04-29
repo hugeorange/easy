@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一个简单原生xhr封装</title>
+</head>
+
+<body>
+    <p>一个简单的原生xhr请求库封装，避免在封装npm包时再去引axios等库增大体积了</p>
+    <a href="https://www.cnblogs.com/tugenhua0707/p/8975121.html">关于Content-type的解释</a>>
+</body>
+<script>
+    /**
+     * ajax请求封装
+     * @param option
+     * url: string
+     * method: "GET" | "POST"
+     * data?: Record<string, any> post请求必备，get请求直接url拼接，不做过多的处理力求最简单
+     * success: response => Function
+     * error: Function
+     * @returns
+     */
+    function ajaxRequest(option) {
+        if (String(option) !== "[object Object]") {
+            throw new Error("请传递正确的参数");
+        }
+        option.method = option.method ? option.method.toUpperCase() : "GET";
+
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = option.responseType || "json";
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    if (option.success && typeof option.success === "function") {
+                        option.success(xhr.response);
+                    }
+                } else {
+                    if (option.error && typeof option.error === "function") {
+                        option.error();
+                    }
+                }
+            }
+        };
+        xhr.open(option.method, option.url, true); // 异步发起ajax
+        if (option.method === "POST") {
+            xhr.setRequestHeader('Content-type', 'application/json')
+        }
+        xhr.send(option.method === "POST" ? JSON.stringify(option.data) : null);
+    }
+
+    // 使用方式如下
+    const getPhoneByPuid = (puid, token) => {
+        return new Promise((resolve, reject) => {
+            ajaxRequest({
+                url: `https://games.mobileapi.hupu.com/1/2/basketballapi/queryMobile`,
+                data: {
+                    userId: puid,
+                    token
+                },
+                method: "POST",
+                success: (res) => resolve(res),
+                error: (err) => reject(err),
+            });
+        });
+    };
+</script>
+
+</html>
