@@ -21,7 +21,7 @@
     "express": "^4.16.2",
     "file-loader": "^1.1.9",
     "html-webpack-plugin": "^2.30.1",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.21",
     "style-loader": "^0.20.2",
     "uglifyjs-webpack-plugin": "^1.2.2",
     "url-loader": "^0.6.2",
